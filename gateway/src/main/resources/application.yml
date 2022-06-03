@@ -1,0 +1,12 @@
+server:
+  port: 9000
+  
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: bookservice
+          uri: http://localhost:9001
+          predicates:
+            - Path=/api/v1/books/**
+       
