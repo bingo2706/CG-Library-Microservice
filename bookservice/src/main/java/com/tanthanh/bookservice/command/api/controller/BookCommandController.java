@@ -34,13 +34,14 @@ public class BookCommandController {
 	}
 	@PutMapping()
 	public String updateBook(@RequestBody BookRequestModel model) {
-		UpdateBookCommand command = new UpdateBookCommand(model.getBookId(), model.getName(), model.getAuthor());
+		UpdateBookCommand command = new UpdateBookCommand(model.getBookId(), model.getName(), model.getAuthor(),model.getIsReady());
 		commandGateway.sendAndWait(command);
 		return "updated book";
 	}
 	@DeleteMapping("/{bookId}")
 	public String deleteBook(@PathVariable String bookId) {
-		return commandGateway.sendAndWait(new DeleteBookCommand(bookId));
+		commandGateway.sendAndWait(new DeleteBookCommand(bookId));
+		return "deleted book";
 	}
 	
 }

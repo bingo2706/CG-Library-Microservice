@@ -66,6 +66,7 @@ public class BookAggregate {
 		this.bookId = event.getBookId();
 		this.author = event.getAuthor();
 		this.name = event.getName();
+		this.isReady = event.getIsReady();
     }
 	@EventSourcingHandler
     public void on(BookDeletedEvent event) {

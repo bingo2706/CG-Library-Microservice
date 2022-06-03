@@ -7,13 +7,15 @@ public class UpdateBookCommand {
 	private String bookId;
 	private String name;
 	private String author;
+	private Boolean isReady;
 	
 	
-	public UpdateBookCommand(String bookId, String name, String author) {
+	public UpdateBookCommand(String bookId, String name, String author, Boolean isReady) {
 		super();
 		this.bookId = bookId;
 		this.name = name;
 		this.author = author;
+		this.isReady = isReady;
 	}
 	public String getBookId() {
 		return bookId;
@@ -32,6 +34,12 @@ public class UpdateBookCommand {
 	}
 	public void setAuthor(String author) {
 		this.author = author;
+	}
+	public Boolean getIsReady() {
+		return isReady;
+	}
+	public void setIsReady(Boolean isReady) {
+		this.isReady = isReady;
 	}
 	
 }

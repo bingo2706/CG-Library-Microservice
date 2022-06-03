@@ -26,6 +26,7 @@ public class BookEventsHandler {
        Book book = bookRepository.getById(event.getBookId());
        book.setAuthor(event.getAuthor());
        book.setName(event.getName());
+       book.setIsReady(event.getIsReady());
         bookRepository.save(book);
     }
 	@EventHandler

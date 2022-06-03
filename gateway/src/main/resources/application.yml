@@ -9,4 +9,8 @@ spring:
           uri: http://localhost:9001
           predicates:
             - Path=/api/v1/books/**
+        - id: employeeservice
+          uri: http://localhost:9002
+          predicates:
+            - Path=/api/v1/employees/**
        

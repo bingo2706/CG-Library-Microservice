@@ -4,7 +4,7 @@ public class BookUpdatedEvent {
 	private String bookId;
 	private String name;
 	private String author;
-	
+	private Boolean isReady;
 	public String getBookId() {
 		return bookId;
 	}
@@ -22,6 +22,12 @@ public class BookUpdatedEvent {
 	}
 	public void setAuthor(String author) {
 		this.author = author;
+	}
+	public Boolean getIsReady() {
+		return isReady;
+	}
+	public void setIsReady(Boolean isReady) {
+		this.isReady = isReady;
 	}
 	
 }
