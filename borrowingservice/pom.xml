@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.tanthanh</groupId>
-	<artifactId>bookservice</artifactId>
+	<artifactId>borrowingservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>bookservice</name>
-	<description>book service for microservice</description>
+	<name>borrowingservice</name>
+	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>2021.0.2</spring-cloud.version>

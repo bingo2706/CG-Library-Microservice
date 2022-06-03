@@ -13,4 +13,8 @@ spring:
           uri: http://localhost:9002
           predicates:
             - Path=/api/v1/employees/**
+        - id: borrowservice
+          uri: http://localhost:9003
+          predicates:
+            - Path=/api/v1/borrowing/**
        
