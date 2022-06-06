@@ -2,15 +2,14 @@ package com.tanthanh.commonservice.command;
 
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
-public class UpdateStatusBookCommand {
-
+public class RollBackStatusBookCommand {
 	@TargetAggregateIdentifier
 	private String bookId;
 	private Boolean isReady;
 	private String employeeId;
 	private String borrowId;
 	
-	public UpdateStatusBookCommand(String bookId, Boolean isReady, String employeeId, String borrowId) {
+	public RollBackStatusBookCommand(String bookId, Boolean isReady, String employeeId, String borrowId) {
 		super();
 		this.bookId = bookId;
 		this.isReady = isReady;
@@ -46,6 +45,4 @@ public class UpdateStatusBookCommand {
 	public void setIsReady(Boolean isReady) {
 		this.isReady = isReady;
 	}
-	
-	
 }

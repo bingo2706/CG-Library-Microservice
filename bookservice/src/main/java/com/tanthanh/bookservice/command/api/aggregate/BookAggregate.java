@@ -13,7 +13,9 @@ import com.tanthanh.bookservice.command.api.command.UpdateBookCommand;
 import com.tanthanh.bookservice.command.api.events.BookCreatedEvent;
 import com.tanthanh.bookservice.command.api.events.BookDeletedEvent;
 import com.tanthanh.bookservice.command.api.events.BookUpdatedEvent;
+import com.tanthanh.commonservice.command.RollBackStatusBookCommand;
 import com.tanthanh.commonservice.command.UpdateStatusBookCommand;
+import com.tanthanh.commonservice.events.BookRollBackStatusEvent;
 import com.tanthanh.commonservice.events.BookUpdateStatusEvent;
 
 @Aggregate
@@ -61,13 +63,22 @@ public class BookAggregate {
 		 BeanUtils.copyProperties(command, event);
 		 AggregateLifecycle.apply(event);
 	 }
-	
+	 @CommandHandler
+	 public void handle(RollBackStatusBookCommand command) {
+		 BookRollBackStatusEvent event = new BookRollBackStatusEvent();
+		 BeanUtils.copyProperties(command, event);
+		 AggregateLifecycle.apply(event);
+	 }
 	@EventSourcingHandler
 	public void on(BookUpdateStatusEvent event) {
 		this.bookId = event.getBookId();
 		this.isReady = event.getIsReady();
 	}
-	 
+	@EventSourcingHandler
+	public void on(BookRollBackStatusEvent event) {
+		this.bookId = event.getBookId();
+		this.isReady = event.getIsReady();
+	}
 	@EventSourcingHandler
     public void on(BookCreatedEvent event) {
 		this.bookId = event.getBookId();

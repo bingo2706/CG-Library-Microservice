@@ -22,4 +22,14 @@ public class BorrowingEventsHandler {
 		
 		borrowRepository.save(model);
 	}
+	@EventHandler
+	public void on(BorrowDeletedEvent event) {
+		borrowRepository.deleteById(event.getId());
+	}
+	@EventHandler
+	public void on(BorrowingUpdateBookReturnEvent event) {
+		Borrowing model = borrowRepository.getById(event.getId());
+		model.setReturnDate(event.getReturnDate());
+		borrowRepository.save(model);
+	}
 }

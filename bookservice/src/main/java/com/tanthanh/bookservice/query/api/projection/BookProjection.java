@@ -1,5 +1,8 @@
 package com.tanthanh.bookservice.query.api.projection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import com.tanthanh.bookservice.query.api.model.BookResponseModel;
 import com.tanthanh.bookservice.query.api.queries.GetBooksQuery;
 import com.tanthanh.commonservice.model.BookResponseCommonModel;
 import com.tanthanh.commonservice.query.GetDetailsBookQuery;
+import com.tanthanh.commonservice.query.GetListBookQuery;
 
 @Component
 public class BookProjection {
@@ -34,4 +38,18 @@ public class BookProjection {
 
 	        return model;
 	    }
+	 @QueryHandler
+	 public List<BookResponseCommonModel> handle(GetListBookQuery getListBookQuery){
+		 List<Book> listEntity = bookRepository.findAll();
+		 List<BookResponseCommonModel> listbook = new ArrayList<>();
+		 listEntity.forEach(s -> {
+			 BookResponseCommonModel model = new BookResponseCommonModel();
+			 model.setBookId(s.getBookId());
+			 model.setAuthor(s.getAuthor());
+			 model.setIsReady(s.getIsReady());
+			 model.setName(s.getName());
+			 listbook.add(model);
+		 });
+		 return listbook;
+	 }
 }

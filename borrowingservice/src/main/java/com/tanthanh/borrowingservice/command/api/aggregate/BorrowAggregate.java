@@ -10,7 +10,11 @@ import org.axonframework.spring.stereotype.Aggregate;
 import org.springframework.beans.BeanUtils;
 
 import com.tanthanh.borrowingservice.command.api.command.CreateBorrowCommand;
+import com.tanthanh.borrowingservice.command.api.command.DeleteBorrowCommand;
+import com.tanthanh.borrowingservice.command.api.command.UpdateBookReturnCommand;
 import com.tanthanh.borrowingservice.command.api.events.BorrowCreatedEvent;
+import com.tanthanh.borrowingservice.command.api.events.BorrowDeletedEvent;
+import com.tanthanh.borrowingservice.command.api.events.BorrowingUpdateBookReturnEvent;
 
 @Aggregate
 public class BorrowAggregate {
@@ -24,9 +28,6 @@ public class BorrowAggregate {
 	private Date borrowingDate;
 	private Date returnDate;
 	
-	
-	
-	
 	public BorrowAggregate() {}
 	
 	@CommandHandler
@@ -35,7 +36,19 @@ public class BorrowAggregate {
 		BeanUtils.copyProperties(command, event);
 		AggregateLifecycle.apply(event);
 	}
+	@CommandHandler
+	public void handle(UpdateBookReturnCommand command) {
+		BorrowingUpdateBookReturnEvent event = new BorrowingUpdateBookReturnEvent();
+		BeanUtils.copyProperties(command, event);
+		AggregateLifecycle.apply(event);
+	}
 	
+	@CommandHandler
+	public void handle(DeleteBorrowCommand command) {
+		BorrowDeletedEvent event = new BorrowDeletedEvent();
+		BeanUtils.copyProperties(command, event);
+		AggregateLifecycle.apply(event);
+	}
 	@EventSourcingHandler
 	public void on(BorrowCreatedEvent event) {
 		this.bookId = event.getBookId();
@@ -43,5 +56,16 @@ public class BorrowAggregate {
 		this.employeeId = event.getEmployeeId();
 		this.id = event.getId();
 	
+	}
+	@EventSourcingHandler
+	public void on(BorrowDeletedEvent event) {
+		this.id = event.getId();
+	}
+	@EventSourcingHandler
+	public void on(BorrowingUpdateBookReturnEvent event) {
+		this.id = event.getId();
+		this.returnDate = event.getReturnDate();
+		this.bookId = event.getBookId();
+		this.employeeId = event.getEmployee();
 	}
 }
