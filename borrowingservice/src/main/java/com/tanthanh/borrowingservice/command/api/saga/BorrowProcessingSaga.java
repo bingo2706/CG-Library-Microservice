@@ -1,5 +1,7 @@
 package com.tanthanh.borrowingservice.command.api.saga;
 
+import java.util.UUID;
+
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.modelling.saga.EndSaga;
@@ -11,6 +13,7 @@ import org.axonframework.spring.stereotype.Saga;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tanthanh.borrowingservice.command.api.command.DeleteBorrowCommand;
+import com.tanthanh.borrowingservice.command.api.command.SendMessageCommand;
 import com.tanthanh.borrowingservice.command.api.events.BorrowCreatedEvent;
 import com.tanthanh.borrowingservice.command.api.events.BorrowDeletedEvent;
 import com.tanthanh.borrowingservice.command.api.events.BorrowingUpdateBookReturnEvent;
@@ -35,12 +38,12 @@ public class BorrowProcessingSaga {
     @SagaEventHandler(associationProperty = "id")
     private void handle(BorrowCreatedEvent event) {
     	 System.out.println("BorrowCreatedEvent in Saga for BookId : "+event.getBookId()+ " : EmployeeId :  "+event.getEmployeeId());
-        
+    	
     	 try {
     		 SagaLifecycle.associateWith("bookId", event.getBookId());
     		 
-    		 GetDetailsBookQuery getDetailsBookQuery = new GetDetailsBookQuery();
-    		 getDetailsBookQuery.setBookId(event.getBookId());
+    		 GetDetailsBookQuery getDetailsBookQuery = new GetDetailsBookQuery(event.getBookId());
+    		
     		 BookResponseCommonModel bookResponseModel =
     			        queryGateway.query(getDetailsBookQuery,
     			                ResponseTypes.instanceOf(BookResponseCommonModel.class))
@@ -70,6 +73,7 @@ public class BorrowProcessingSaga {
     	 try {
     		 UpdateStatusBookCommand command = new UpdateStatusBookCommand(event.getBookId(), true,event.getEmployee(),event.getId());
 			 commandGateway.sendAndWait(command);
+			 commandGateway.sendAndWait(new SendMessageCommand(event.getId(), event.getEmployee(), "Da tra sach thanh cong !"));
 			SagaLifecycle.end();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -85,8 +89,8 @@ public class BorrowProcessingSaga {
     private void handle(BookUpdateStatusEvent event) {
     	 System.out.println("BookUpdateStatusEvent in Saga for BookId : "+event.getBookId());
     	 try {
-			GetDetailsEmployeeQuery getDetailsEmployeeQuery = new GetDetailsEmployeeQuery();
-			getDetailsEmployeeQuery.setEmployeeId(event.getEmployeeId());
+			GetDetailsEmployeeQuery getDetailsEmployeeQuery = new GetDetailsEmployeeQuery(event.getEmployeeId());
+			
 			 EmployeeResponseCommonModel employeeResponseCommonModel =
  			        queryGateway.query(getDetailsEmployeeQuery,
  			                ResponseTypes.instanceOf(EmployeeResponseCommonModel.class))
@@ -94,6 +98,7 @@ public class BorrowProcessingSaga {
 			 if(employeeResponseCommonModel.getIsDisciplined()==true) {
 				 throw new Exception("Nhan vien bi ky luat");
 			 }else {
+				 commandGateway.sendAndWait(new SendMessageCommand(event.getBorrowId(), event.getEmployeeId(), "Da muon sach thanh cong !"));
 				 SagaLifecycle.end();
 			 }
 		} catch (Exception e) {

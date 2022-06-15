@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.tanthanh.bookservice.command.api.data.Book;
 import com.tanthanh.bookservice.command.api.data.BookRepository;
 import com.tanthanh.bookservice.query.api.model.BookResponseModel;
+import com.tanthanh.bookservice.query.api.queries.GetAllBooksQuery;
 import com.tanthanh.bookservice.query.api.queries.GetBooksQuery;
 import com.tanthanh.commonservice.model.BookResponseCommonModel;
 import com.tanthanh.commonservice.query.GetDetailsBookQuery;
@@ -44,10 +45,17 @@ public class BookProjection {
 		 List<BookResponseCommonModel> listbook = new ArrayList<>();
 		 listEntity.forEach(s -> {
 			 BookResponseCommonModel model = new BookResponseCommonModel();
-			 model.setBookId(s.getBookId());
-			 model.setAuthor(s.getAuthor());
-			 model.setIsReady(s.getIsReady());
-			 model.setName(s.getName());
+			 BeanUtils.copyProperties(s, model);
+			 listbook.add(model);
+		 });
+		 return listbook;
+	 }
+	 @QueryHandler List<BookResponseModel> handle(GetAllBooksQuery getAllBooksQuery){
+		 List<Book> listEntity = bookRepository.findAll();
+		 List<BookResponseModel> listbook = new ArrayList<>();
+		 listEntity.forEach(s -> {
+			 BookResponseModel model = new BookResponseModel();
+			 BeanUtils.copyProperties(s, model);
 			 listbook.add(model);
 		 });
 		 return listbook;

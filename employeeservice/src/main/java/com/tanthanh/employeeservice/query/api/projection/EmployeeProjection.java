@@ -1,5 +1,8 @@
 package com.tanthanh.employeeservice.query.api.projection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import com.tanthanh.commonservice.query.GetDetailsEmployeeQuery;
 import com.tanthanh.employeeservice.command.api.data.Employee;
 import com.tanthanh.employeeservice.command.api.data.EmployeeRepository;
 import com.tanthanh.employeeservice.query.api.model.EmployeeReponseModel;
+import com.tanthanh.employeeservice.query.api.queries.GetAllEmployeeQuery;
 import com.tanthanh.employeeservice.query.api.queries.GetEmployeesQuery;
 
 @Component
@@ -37,4 +41,15 @@ public class EmployeeProjection {
 
         return model;
     }
+	@QueryHandler
+	public List<EmployeeReponseModel> handle(GetAllEmployeeQuery getAllEmployeeQuery){
+		List<EmployeeReponseModel> listModel = new ArrayList<>();
+		List<Employee> listEntity = employeeRepository.findAll();
+		listEntity.stream().forEach(s -> {
+			EmployeeReponseModel model = new EmployeeReponseModel();
+			BeanUtils.copyProperties(s, model);
+			listModel.add(model);
+		});
+		return listModel;
+	}
 }

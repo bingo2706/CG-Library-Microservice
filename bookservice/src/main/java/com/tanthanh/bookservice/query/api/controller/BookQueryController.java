@@ -1,5 +1,7 @@
 package com.tanthanh.bookservice.query.api.controller;
 
+import java.util.List;
+
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tanthanh.bookservice.query.api.model.BookResponseModel;
+import com.tanthanh.bookservice.query.api.queries.GetAllBooksQuery;
 import com.tanthanh.bookservice.query.api.queries.GetBooksQuery;
 
 @RestController
@@ -30,4 +33,11 @@ public class BookQueryController {
 
         return bookResponseModel;
     }
+	@GetMapping
+	public List<BookResponseModel> getAllBooks(){
+		GetAllBooksQuery getAllBooksQuery = new GetAllBooksQuery();
+		List<BookResponseModel> list = queryGateway.query(getAllBooksQuery, ResponseTypes.multipleInstancesOf(BookResponseModel.class))
+				.join();
+		return list;
+	}
 }

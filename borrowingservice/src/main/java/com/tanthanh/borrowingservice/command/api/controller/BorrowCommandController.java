@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tanthanh.borrowingservice.command.api.command.CreateBorrowCommand;
 import com.tanthanh.borrowingservice.command.api.command.UpdateBookReturnCommand;
+import com.tanthanh.borrowingservice.command.api.data.BorrowRepository;
 import com.tanthanh.borrowingservice.command.api.model.BorrowRequestModel;
+import com.tanthanh.borrowingservice.command.api.service.IBorrowService;
 
 @RestController
 @RequestMapping("/api/v1/borrowing")
@@ -23,11 +25,15 @@ public class BorrowCommandController {
 	@Autowired
 	private CommandGateway commandGateway;
 	
+	@Autowired
+	private IBorrowService borrowService;
+	
+	
 	@PostMapping
 	public String addBookBorrowing(@RequestBody BorrowRequestModel model) {
 		try {
 			CreateBorrowCommand command = 
-					new CreateBorrowCommand(model.getBookId(), model.getEmployeeId(), model.getBorrowingDate(),UUID.randomUUID().toString());
+					new CreateBorrowCommand(model.getBookId(), model.getEmployeeId(), new Date(),UUID.randomUUID().toString());
 				commandGateway.sendAndWait(command);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -38,7 +44,7 @@ public class BorrowCommandController {
 	}
 	@PutMapping
 	public String updateBookReturn(@RequestBody BorrowRequestModel model) {
-		UpdateBookReturnCommand command = new UpdateBookReturnCommand(model.getId(), model.getBookId(),model.getEmployeeId(),new Date());
+		UpdateBookReturnCommand command = new UpdateBookReturnCommand(borrowService.findIdBorrowing(model.getEmployeeId(), model.getBookId()), model.getBookId(),model.getEmployeeId(),new Date());
 		commandGateway.sendAndWait(command);
 		return "Book returned";
 	}

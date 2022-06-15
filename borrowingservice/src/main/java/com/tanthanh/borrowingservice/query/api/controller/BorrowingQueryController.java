@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tanthanh.borrowingservice.query.api.model.BorrowingResponseModel;
+import com.tanthanh.borrowingservice.query.api.queries.GetAllBorrowing;
 import com.tanthanh.borrowingservice.query.api.queries.GetListBorrowingByEmployeeQuery;
 
 @RestController
@@ -29,6 +30,12 @@ public class BorrowingQueryController {
 			queryGateway.query(getBorrowingQuery, ResponseTypes.multipleInstancesOf(BorrowingResponseModel.class))
 			.join();
 		
+		return list;
+	}
+	@GetMapping
+	public List<BorrowingResponseModel> getAllBorrowing(){
+		List<BorrowingResponseModel> list = queryGateway.query(new GetAllBorrowing(), ResponseTypes.multipleInstancesOf(BorrowingResponseModel.class))
+				.join();
 		return list;
 	}
 }

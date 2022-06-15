@@ -16,6 +16,7 @@ import com.tanthanh.commonservice.model.BorrowingResponseCommonModel;
 import com.tanthanh.commonservice.query.GetListBookQuery;
 import com.tanthanh.commonservice.query.GetListBorrowingByEmployee;
 import com.tanthanh.employeeservice.query.api.model.EmployeeReponseModel;
+import com.tanthanh.employeeservice.query.api.queries.GetAllEmployeeQuery;
 import com.tanthanh.employeeservice.query.api.queries.GetEmployeesQuery;
 
 
@@ -39,6 +40,12 @@ public class EmployeeQueryController {
 
         return employeeReponseModel;
     }
+	@GetMapping
+	public List<EmployeeReponseModel> getAllEmployee(){
+		List<EmployeeReponseModel> list = queryGateway.query(new GetAllEmployeeQuery(), ResponseTypes.multipleInstancesOf(EmployeeReponseModel.class))
+				.join();
+		return list;
+	}
 	@GetMapping("/{employeeId}/books")
 	public List<BookResponseCommonModel> getEmployeeBorrowedBook(@PathVariable String employeeId){
 		
@@ -54,17 +61,17 @@ public class EmployeeQueryController {
 		List<BookResponseCommonModel> listBook = 
 				queryGateway.query(new GetListBookQuery(), ResponseTypes.multipleInstancesOf(BookResponseCommonModel.class))
 				.join();
+		
+		
+		
 		List<BookResponseCommonModel> listTemp = new ArrayList<>();
-		for(int i = 0;i <listBook.size();i++) {
-			for(int j = 0 ; j< listBorrowing.size();j++) {
-				if(listBook.get(i).getBookId() == listBorrowing.get(j).getBookId()) {
-					listTemp.add(listBook.get(i));
-					continue;
-				}
-			}
-		}
+		
+		listTemp = listBook.stream()
+				.filter(x -> listBorrowing.stream().anyMatch(y -> y.getBookId().equals(x.getBookId()))).toList();
+		
 		
 		
 		return listTemp;
 	}
+	
 }

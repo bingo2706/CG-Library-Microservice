@@ -8,6 +8,22 @@ public class BorrowingResponseModel {
 	private String employeeId;
 	private Date borrowingDate;
 	private Date returnDate;
+	private String nameBook;
+	private String nameEmployee;
+	
+	
+	public String getNameBook() {
+		return nameBook;
+	}
+	public void setNameBook(String nameBook) {
+		this.nameBook = nameBook;
+	}
+	public String getNameEmployee() {
+		return nameEmployee;
+	}
+	public void setNameEmployee(String nameEmployee) {
+		this.nameEmployee = nameEmployee;
+	}
 	public String getId() {
 		return id;
 	}
