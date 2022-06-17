@@ -98,9 +98,14 @@ public class UserService implements IUserService, UserDetailsService{
 				Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
 				String access_token = JWT.create()
 						.withSubject(user.getUsername())
-						.withExpiresAt(new Date(System.currentTimeMillis()+ (120 * 60 * 1000)))
+						.withExpiresAt(new Date(System.currentTimeMillis()+ (1 * 60 * 1000)))
+						.sign(algorithm);
+				String refreshtoken = JWT.create()
+						.withSubject(user.getUsername())
+						.withExpiresAt(new Date(System.currentTimeMillis()+ (10080 * 60 * 1000)))
 						.sign(algorithm);
 				dto.setToken(access_token);
+				dto.setRefreshtoken(refreshtoken);
 			}
 		}
 		return dto;

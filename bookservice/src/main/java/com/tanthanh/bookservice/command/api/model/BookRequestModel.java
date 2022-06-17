@@ -15,6 +15,10 @@ public class BookRequestModel {
 		this.isReady = isReady;
 	}
 	
+	public BookRequestModel() {
+		super();
+	}
+
 	public String getBookId() {
 		return bookId;
 	}

@@ -6,6 +6,14 @@ public class UserDTO {
 	private String password;
 	private String employeeId;
 	private String token;
+	private String refreshtoken;
+	
+	public String getRefreshtoken() {
+		return refreshtoken;
+	}
+	public void setRefreshtoken(String refreshtoken) {
+		this.refreshtoken = refreshtoken;
+	}
 	public Long getId() {
 		return id;
 	}
